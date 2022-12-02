@@ -1,0 +1,23 @@
+###########################################################################################################################
+# This is an example of creating a ranking system within a DataMiner script by using the Quick Rank method.
+# Quick Rank uses a single metric as the Formula.
+# Quick Rank is only available for the screen operations (including RankPerformance). 
+###########################################################################################################################
+
+Main:
+    Operation: ScreenRun
+    On Error:  Stop
+
+Default Settings:
+    Vendor: Factset
+    PIT Method: Prelim
+    Type: Stock
+    As of Date: 2020-01-01
+    End Date: 2020-02-01
+    Universe: Prussell1000
+    Max Num Holdings: 50
+    Benchmark: SPY
+    Method: Long
+    Ranking:
+        Formula: SalesGr%TTM
+        Lower is Better: false # ( true | [false] )

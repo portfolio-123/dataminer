@@ -1,0 +1,10 @@
+.idea/
+__pycache__/
+build/
+dist/
+Output/
+app.log
+config.ini
+setup.py
+data_miner.spec
+installer.iss

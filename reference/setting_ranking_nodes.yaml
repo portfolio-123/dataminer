@@ -1,0 +1,49 @@
+# Inline Ranking System Nodes using yaml syntax
+
+# Basic structure of a list of nodes
+Nodes:
+    -
+        see below
+    -
+        see below
+    ...
+
+# Nodes
+
+# Composite node
+Type: Composite
+Name: node name
+Weight: 0 # ( [0] - 100 where 0 indicates equal weight)
+Rank: Higher # ( [Higher] | Lower | Summation )
+Nodes: see setting_ranking_nodes.yaml
+
+# Stock Formula Nodes
+Type: StockFormula
+Name: node name
+Weight: 0  # ( [0] - 100 where 0 indicates equal weight)
+Rank: Higher # ( [Higher] | Lower | Boolean )
+Formula: EPSExclXorTTM
+Scope: Universe # ( [Universe] | Industry | Sector )
+
+# Industry Formula Nodes
+Type: IndFormula
+Name: node name
+Weight: 0  # ( [0] - 100 where 0 indicates equal weight)
+Rank: Higher # ( [Higher] | Lower | Boolean )
+Formula: EPSExclXorTTM
+
+# Sector Formula Nodes
+Type: SecFormula
+Name: node name
+Weight: 0  # ( [0] - 100 where 0 indicates equal weight)
+Rank: Higher # ( [Higher] | Lower | Boolean )
+Formula: EPSExclXorTTM
+
+# Conditional Node
+Type: Conditional
+Name: node name
+Rank: Higher # ( [Higher] | Lower )
+Weight: 0 # ( [0] - 100 where 0 indicates equal weight)
+Formula: MktCap > 5000 # 
+True Nodes: see setting_ranking_nodes.yaml
+False Nodes: see setting_ranking_nodes.yaml

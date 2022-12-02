@@ -1,0 +1,24 @@
+##########################################################################
+# Screens allow you to filter a universe of stocks or ETFs based on the
+# rules you provide. The ScreenRun operation in DataMiner has all the same
+# capabilities as the screener on the website including the option
+# of incorporating a ranking system into the screen and running screens
+# that are either long, long/short or hedged.
+#
+# This example finds the 5 Tech sector ETFs with the highest returns for 
+# the last year. It filters out any leveraged ETFs.
+##########################################################################
+
+Main:
+    Operation: ScreenRun
+    On Error:  Stop
+    Precision: 2
+Default Settings:
+    Type: ETF
+    As of Date: 2021-01-08
+    Benchmark: XLK
+    Method: Long
+    Rules:
+        - ETFSector = TECHNOL
+        - ETFMethod = STANLONG or ETFMethod = QUANT #Filter out leveraged ETFs
+        - FOrder("Rel%Chg(253,#ETFSector)",#previous,#desc) <= 5

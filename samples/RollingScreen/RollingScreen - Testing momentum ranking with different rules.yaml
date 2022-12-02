@@ -1,0 +1,50 @@
+#################################################################
+# A rolling screen backtest means that the screen backtest is first
+# run on the first Saturday after the Start Date and the stocks are
+# held for the number of days specified as the Holding Period. Then
+# the screen backtest is run again using a start date that is either
+# 1 week or 4 weeks in the future as specified by the Frequency. This
+# continues until tests have been run for the entire period between
+# the specified Start Date and End Date.
+#
+# This example creates a custom universe and runs rolling screen
+# backtests for a momentium ranking system and a quick rank.
+#################################################################
+
+Main:
+    Operation: RollingScreen
+    On Error: Stop
+
+Default Settings:
+    Type: Stock
+    Method: Long
+    Benchmark: SPY
+    Universe:
+        Starting Universe: Prussell3000
+        Rules:
+            - mktcap > 500
+            - Vol10DAvg > 1
+    Start Date: 2010-01-01
+    End Date: 2020-01-01
+    Frequency: 4Weeks
+    Holding Period: 365
+    Max Num Holdings: 20
+    Ranking: "Core: Momentum"
+
+Iterations:
+    -   #Baseline using the settings above.
+        Name: Core Momentum top 20
+
+    -   # Same settings as baseline except change the number of stocks held.
+        Name: Core Momentum top 10
+        Max Num Holdings: 10
+
+    -   # Same as baseline except using a quick rank instead of Core: Momentium.
+        Name: Price Target revision
+        Ranking:
+            Formula: PriceTargetMean/PriceTarget4WkAgo
+
+    -   # Same as baseline, except add a rule to the screen.
+        Name: Avoid high PE
+        Rules:
+            - PEExclXorTTM < 50

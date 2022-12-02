@@ -1,0 +1,59 @@
+########################################################################################
+# This operation runs multiple bucket performance tests of multi-factor ranking
+# systems. You can use an existing ranking system that we offer or a ranking system 
+# that you have created on the website. It is also possible to define the ranking
+# system within the DataMiner script. Other settings include the number of buckets,
+# the rebalance period, and the starting universe. The DataMiner output includes
+# many more statistics than what the website offers. To collect these stats, DataMiner
+# runs a screen backtest for each bucket.
+#
+# In this example, the universe is defined within the DataMiner script. There are 5
+# iterations with each one testing a different value factor. To accomplish this, 
+# each iteration has a ranking system consisting of a single formula. We call this a
+# 'Quick Rank'. The different methods of defining a ranking system within the DataMiner
+# script can be found in setting_rankings.yaml in the DataMiner reference files and in
+# the "Inline Ranking System" folder in Samples.
+########################################################################################
+
+Main:
+    Operation: RankPerformance
+    On Error:  Stop
+
+Default Settings:
+    PIT Method: Prelim 
+    Buckets: 5
+    Start Date: 2005-01-01
+    End Date: 2020-01-01
+    Rebalance Frequency: 4Weeks
+    Benchmark: IWM #Russell 2000
+    Universe:
+        Rules:
+            - Sector = MATERIALS
+        Starting Universe: Prussell 2000
+
+Iterations:
+    -  
+        Name: EBITDA/EV
+        Ranking:
+            Formula: EBITDATTM/EV
+            Lower is Better: false
+    -  
+        Name: Price to Free Cash Flow
+        Ranking:
+            Formula: Pr2FrCashFlTTM
+            Lower is Better: true
+    -  
+        Name: Price to Book
+        Ranking:
+            Formula: Pr2BookQ
+            Lower is Better: true
+    -  
+        Name: Price to Sales
+        Ranking:
+            Formula: Pr2SalesTTM
+            Lower is Better: true
+    -  
+        Name: Price to Earnings
+        Ranking:
+            Formula: PEExclXorTTM
+            Lower is Better: true

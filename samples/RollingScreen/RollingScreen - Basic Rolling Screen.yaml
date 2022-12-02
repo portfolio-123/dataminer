@@ -1,0 +1,39 @@
+#################################################################
+# A rolling screen backtest means that the screen backtest is first
+# run on the first Saturday after the Start Date and the stocks are
+# held for the number of days specified as the Holding Period. Then
+# the screen backtest is run again using a start date that is either
+# 1 week or 4 weeks in the future as specified by the Frequency. This
+# continues until tests have been run for the entire period between
+# the specified Start Date and End Date.
+#
+# This basic example creates a custom universe by adding a rule to our
+# Prussell2000 universe. Then it runs the backtest for a single ranking
+# system. The backtest covers 20 years and tests are run for rolling dates 
+# 4 weeks apart with 20 stocks held for 3 months in each interation. 
+#################################################################
+
+Main:
+    Operation: RollingScreen
+    On Error: Stop
+
+Default Settings:
+    Type: Stock
+    Method: Long
+    Benchmark: IWM
+    Universe:
+        Starting Universe: Prussell2000
+        Rules:
+            - AvgDailyTot(30) > 200000
+    Start Date: 2001-01-01
+    End Date: 2021-01-01
+    Frequency: 4Weeks
+    Holding Period: 91
+    Max Num Holdings: 20
+    Ranking: "Core: Value"
+    Trans Price: Open
+    Include Results: true
+
+Iterations:
+    -
+        Name: Core Value top 20

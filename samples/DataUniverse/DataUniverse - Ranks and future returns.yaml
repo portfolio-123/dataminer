@@ -1,0 +1,39 @@
+############################################################################################################
+# The DataUniverse operation allows you to retrieve point in time data for a selected universe for a given date range. 
+# The script below contains a list of formulas and the output will contain the values for those 
+# formulas at 4 week intervals for the 2015-2020 period.  Most of the formulas in the example are
+# ranks for different valuation factors. The first two formulas are 'future returns'. For example,
+# Future%Chg(21) is the percentage return for the stock over the next 21 bars. This data could be
+# used when training an AI system to determine which of the valuation factors predicted the future returns.
+############################################################################################################
+
+Main:
+    Operation: DataUniverse
+    On Error:  Stop # ( [Stop] | Continue )
+    Precision: 2 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    PIT Method: Prelim # Complete | Prelim
+    Start Date: 2015-01-01
+    End Date: 2020-01-01 # ( [todays date] )
+    Frequency: 4weeks # ( [ 1Week ] | 2Weeks | 3Weeks | 4Weeks | 6Weeks | 8Weeks | 13Weeks | 26Weeks | 52Weeks )
+    Universe: SP500
+    Include Names: false # ( true | [false] )
+    Formulas:
+        - Future21%Chg: Future%Chg(21) #Future total 21 bar return. Used when training an AI system.
+        - Future21%ChgVsInd: FutureRel%Chg(21,#Industry) #Future total 21 bar return relative to stocks industry
+        # FRank function returns the rank of the stock's fundamental metric vs the same metric for other stocks 
+        # in the universe, industry, etc.
+        - Pr2Sales Rank: FRank("Pr2SalesTTM",#Industry,#ASC)
+        - EarnYield Rank: FRank("EarnYield",#All,#DESC)
+        - Pr2FrCashFlQ Rank: FRank("Pr2FrCashFlTTM",#All,#ASC)
+        - PEGST Rank: FRank("PEGST",#All,#ASC)
+        - Pr2BookQ Rank: FRank("Pr2BookQ",#SubIndustry,#ASC)
+        - PEExclXorTTM Rank: FRank("PEExclXorTTM",#All,#ASC)
+        - ProjPECurFY Rank: FRank("ProjPECurFY",#All,#ASC)        
+        - ProjPENextFY Rank: FRank("ProjPENextFY",#All,#ASC)
+       
+# A data license with the data providers we support (Compustat or Factset) is required for this operation 
+# in order to return raw fundamental factors. However, you can retrieve most price related data and derived 
+# fundamental factor ranks and z-scores without a vendor data license. An example of derived data would be
+# the Price to Sales rank vs the other stocks in the stocks industry. Contact us for more details.

@@ -1,0 +1,39 @@
+#################################################################################################################
+# Screens allow you to filter a universe of stocks or ETFs based on the rules you provide. The ScreenRun operation
+# in DataMiner has all the same capabilities as the screener on the website including the option of incorporating
+# a ranking system into the screen and running screens that are either long, long/short or hedged.
+
+# This example of the ScreenRun operation is based on the 'Focus on R&D' screen which can be found on the website.
+# The website has a detailed description of the reasoning behind the screen, but the summary is companies with high 
+# R&D to equity market value earn large excess future returns.
+# The screen begins with the Russell 3000 and eliminates companies in industries that seldom report R&D expenses 
+# or whose R&D expenses are relatively irrelevant to their future performance.
+# We then impose the rule that the companies have to spend 15% of their equity market value on R&D.
+# Next, we eliminate companies that have strong short interest as those are the most likely to have significant problems.
+# Lastly, we eliminate companies whose growth has been poor by using one of our core ranking systems.
+#################################################################################################################
+
+Main:
+    Operation: ScreenRun
+    On Error:  Stop # ( [Stop] | Continue )
+    Precision: 2 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    Vendor: Factset #( [Compustat] | Factset )
+    PIT Method: Prelim #( [Complete] | Prelim )
+    Type: Stock #([Stock] | ETF )
+    As of Date: 2021-01-02
+    Universe: Prussell3000
+    Benchmark: SPY
+
+    Method: Long # ( [Long] | Short | LongShort | Hedge )
+    Ranking:
+        Formula: Pr2FrCashFlTTM
+        Lower is Better: true # ( true | [false] )
+    
+    Rules:
+        - GICS (10,151040,2020,40,50,55,60) = 0 
+           #Eliminate energy, mining, commercial and prof svcs, financials, communications, utilities, and real estate
+        - RAndDTTM/MktCap > 0.15 or RAndDA/MktCap > 0.15 #High R&D spending compared to market cap
+        - SI%ShsOut < 5 #Low short interest
+        - "Rating(\"Core: Growth\") > 25"  #Eliminates companies with poor growth records

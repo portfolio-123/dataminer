@@ -1,0 +1,23 @@
+Main:
+    Operation: RanksMulti
+    On Error:  Stop # ( [Stop] | Continue )
+    Precision: 3 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    Vendor: Factset #( [ Factset ] | Compustat )
+    PIT Method: Prelim # ( [Complete] | Prelim )
+    As of Date: 2015-01-01
+    Universe: see settings_universe.yaml
+    Tickers: IBM MSFT INTC
+    Include Names: true # ( true | [false] )
+    
+Iterations:
+    -
+        Name: Name1 # optional
+        Ranking System: see settings_ranking_system.yaml
+        Ranking Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+        
+    -
+        Name: Name2 # optional
+        Ranking System: see settings_ranking_system.yaml
+        Ranking Method: NAsNegative #( [NAsNegative] | NAsNeutral )

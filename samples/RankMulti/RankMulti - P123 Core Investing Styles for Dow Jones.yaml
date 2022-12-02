@@ -1,0 +1,44 @@
+###############################################################
+# This operation allows you to download current or historical
+# ranks for multiple ranking systems for a single date. The
+# Ranking system can be specified directly in the script or you
+# can use existing ranking systems. It is like using a screen
+# with an unlimited number of "Rating" commands.
+
+# The example below returns the ranks from 6 different ranking
+# systems which are based on different investing styles and one
+# ranking system that is a combination of those 6. It uses the
+# Dow stocks as the universe.
+###############################################################
+
+Main:
+    Operation: RanksMulti
+    On Error:  Stop
+
+Default Settings:
+    PIT Method: Prelim
+    As of Date: 2020-12-01
+    Universe: DJIA
+
+Iterations:
+    -
+        Name: Combo
+        Ranking System: "Core Combination"
+    -
+        Name: Value
+        Ranking System: "Core: Value"
+    -
+        Name: Growth
+        Ranking System: "Core: Growth"
+    -
+        Name: Low Vol
+        Ranking System: "Core: Low Volatility"
+    -
+        Name: Quality
+        Ranking System: "Core: Quality"
+    -
+        Name: Sentiment
+        Ranking System: "Core: Sentiment"
+    -
+        Name: Momentum
+        Ranking System: "Core: Momentum"

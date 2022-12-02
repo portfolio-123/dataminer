@@ -1,0 +1,35 @@
+####################################################################################
+# The ScreenBacktest operation is basically the same as the ScreenRun operation
+# except that the screen is executed multiple times at the intervals set by the
+# Rebalance Frequency parameter for the period defined by the Start Data and End Date
+# and the returns are calculated for the screen’s holdings.
+
+# Below is an example of a screen backtest which will: 
+#  - Start with the US All Fundamentals universe.
+#  - Buy the top 20 microcap value stocks which are showing strong momentum.
+#  - Run the test for the past 10 years and rebalance every 4 weeks.
+#  - Set the price of the stock to the average of the high and low price on the
+#    buy/sell date and add .25% 'slippage' cost to the transaction.
+####################################################################################
+
+Main:
+    Operation: ScreenBacktest
+    On Error:  Stop
+Default Settings:
+    Start Date: 2011-01-01
+    End Date: 2021-01-01
+    Rebalance Frequency: 4Weeks
+    Slippage: .25
+    Ranking: 'Core: Value'
+    Universe: ALLFUND
+    Max Pos Pct: 10
+    Max Num Holdings: 20
+    Benchmark: IWM
+    Trans Price: AvgHiLow
+    Rules:
+        - MktCap < 300 #microcaps
+        - AvgDailyTot(30) > 300000 #tradable
+        - Close(0) > Close(90) AND Close(0) > Close(180)
+        - Rank >= 70
+        - FOrder("close(1)/close(250)",#previous,#desc) <= 35 #Want the strongest performers.
+        - FOrder("close(1)/close(250)",#previous,#desc) >= 5  #But filter out the high flyers.

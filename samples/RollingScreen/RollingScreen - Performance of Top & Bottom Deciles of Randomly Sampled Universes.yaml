@@ -1,0 +1,163 @@
+#################################################################
+# A rolling screen backtest means that the screen backtest is first
+# run on the first Saturday after the Start Date and the stocks are
+# held for the number of days specified as the Holding Period. Then
+# the screen backtest is run again using a start date that is either
+# 1 week or 4 weeks in the future as specified by the Frequency. This
+# continues until tests have been run for the entire period between
+# the specified Start Date and End Date.
+#
+# This is a rolling screen backtest of 3 ranking systems we offer,
+# "Core: Growth" and "Core: Value". It divides the S&P 500 universes
+# into five random subuniverses and then tests a 367-day holding
+# period, tested every four weeks between 2007 and 2020, for the top
+# and bottom deciles of each ranking system.
+#################################################################
+
+
+Main:
+    Operation: RollingScreen
+    On Error: Stop
+
+Default Settings:
+    Type: Stock
+    Method: Long
+    Max Num Holdings: 0
+    Benchmark: SPY
+    Vendor: FactSet
+    PIT Method: Complete
+
+    Universe:
+        Rules:
+            - mktcap > 50 
+            - avgdailytot(10) > 250000
+        Starting Universe: All Fundamentals - USA
+
+    Trans Price: Open
+    Start Date: 2007-01-01
+    End Date: 2020-10-06
+    Frequency: 4Weeks
+    Holding Period: 367
+
+Iterations:
+	-
+		Name: cheap stocks mod 1
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 1
+			- rank > 90
+	-
+		Name: cheap stocks mod 2
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 2
+			- rank > 90
+	-
+		Name: cheap stocks mod 3
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 3
+			- rank > 90
+	-
+		Name: cheap stocks mod 4
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 4
+			- rank > 90
+	-
+		Name: cheap stocks mod 5
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 0
+			- rank > 90
+	-
+		Name: growth stocks mod 1
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 1
+			- rank > 90
+	-
+		Name: growth stocks mod 2
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 2
+			- rank > 90
+	-
+		Name: growth stocks mod 3
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 3
+			- rank > 90
+	-
+		Name: growth stocks mod 4
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 4
+			- rank > 90
+	-
+		Name: growth stocks mod 5
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 0
+			- rank > 90
+	-
+		Name: expensive stocks mod 1
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 1
+			- rank < 10
+	-
+		Name: expensive stocks mod 2
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 2
+			- rank < 10
+	-
+		Name: expensive stocks mod 3
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 3
+			- rank < 10
+	-
+		Name: expensive stocks mod 4
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 4
+			- rank < 10
+	-
+		Name: expensive stocks mod 5
+		Ranking: 'Core: Value'
+		Rules: 
+			- mod (stockid, 5) = 0
+			- rank < 10
+	-
+		Name: no-growth stocks mod 1
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 1
+			- rank < 10
+	-
+		Name: no-growth stocks mod 2
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 2
+			- rank < 10
+	-
+		Name: no-growth stocks mod 3
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 3
+			- rank < 10
+	-
+		Name: no-growth stocks mod 4
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 4
+			- rank < 10
+	-
+		Name: no-growth stocks mod 5
+		Ranking: 'Core: Growth'
+		Rules: 
+			- mod (stockid, 5) = 0
+			- rank < 10
+	

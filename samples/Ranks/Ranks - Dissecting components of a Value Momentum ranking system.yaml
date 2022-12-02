@@ -1,0 +1,54 @@
+#######################################################################################
+# The Ranks operation returns historical ranks from a single ranking system for multiple
+# dates between the Start and End dates. The Ranking system can be specified directly
+# in the script or use existing ranking systems created using the website. It can return
+# just the primary rank from the ranking system and can also return the composite level
+# ranks and the factor level ranks.
+#
+# The Additional Data parameter returns price and technical data and also derived values
+# for fundamental factors using functions like FRank and ZScore without a vendor data
+# license. To enable download of raw fundamental data, you will need a FactSet or
+# Compustat license. Contact us for more details.
+#######################################################################################
+
+Main:
+    Operation: Ranks
+    On Error:  Stop
+
+Default Settings:
+    PIT Method: Prelim 
+    Ranking Method: NAsNegative
+    Universe: Prussell 1000
+    Start Date: 2020-04-18
+    End Date: 2020-05-18 #Optional.
+    Frequency: 1Week # ( [ 1Week ] | 2Weeks | 3Weeks | 4Weeks | 6Weeks | 8Weeks | 13Weeks | 26Weeks | 52Weeks )
+    Columns: composite # ( [ranks] | composite | factor )
+    Include Names: true # ( true | [false] )
+    Ranking System: 
+        Nodes:
+            -
+                Type: Composite
+                Weight: 60
+                Name: Momentum
+                Rank: Higher
+                Nodes:
+                    -
+                        Type: StockFormula
+                        Formula: Close(0) / Close(60)
+                    -
+                        Type: StockFormula
+                        Formula: Close(0) / Close(251)
+            -        
+                Type: Composite
+                Weight: 40
+                Name: Value
+                Rank: Higher
+                Nodes:
+                    - 
+                        Type: StockFormula
+                        Rank: Lower
+                        Formula: Pr2BookQ
+                    - 
+                        Type: StockFormula
+                        Rank: Lower
+                        Formula: Pr2SalesTTM

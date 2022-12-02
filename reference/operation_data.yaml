@@ -1,0 +1,22 @@
+Main:
+    Operation: Data
+    On Error:  Stop # ( [ Stop ] | Continue )
+    Precision: 3 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    Vendor: Factset #( [ Factset ] | Compustat )
+    PIT Method: Prelim # ( Complete | [ Prelim ] )
+    Start Date: 2015-01-01
+    #End Date: yyyy-mm-dd # optional
+    Frequency: 1Week # ( [ 1Week ] | 2Weeks | 3Weeks | 4Weeks | 6Weeks | 8Weeks | 13Weeks | 26Weeks | 52Weeks )
+    Tickers: IBM MSFT INTC # 100 max
+    #P123 UIDs: 4737 5881 4773 # 100 max
+    #Cusips: 459200101 594918104 458140100 # 100 max
+    #Gvkeys: 006066 006008 012141 # 100 max
+    #Ciks: 0000051143 0000050863 0000789019 # 100 max
+    
+    Formulas: # 100 max
+        - MyName1: MktCap
+        - Pr2SalesTTM
+    
+    Include Names: true # ( [ false ] | true )

@@ -1,0 +1,33 @@
+Main:
+    Operation: ScreenRun
+    On Error:  Stop # ( [Stop] | Continue )
+    Precision: 3 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    Vendor: Factset #( [ Factset ] | Compustat )
+    PIT Method: Prelim # ( [Complete] | Prelim )
+    Type: Stock # ( [Stock] | ETF )
+    As of Date: yyyy-mm-dd
+    End Date: yyyy-mm-dd
+    Ranking: see settings_ranking.yaml
+    Universe: see settings_universe.yaml
+    Max Num Holdings: 0 # ( [0] or the max number of stocks to hold )
+    Benchmark: ticker
+    Method: Long # ( [Long] | Short | LongShort | Hedge )
+    Screen: 12345 # id of saved screen
+    
+    # Screening rules 
+    Rules:
+        - MktCap > 1000 # screening rule example
+        - # other screening rules
+    # only for Method LongShort
+    Long Rules:
+        - MktCap>100
+        - Close(0)>3
+    Short Rules:
+        - MktCap>100
+        - Close(0)>3
+    # only for Method Hedge
+    Hedge Rules:
+        - MktCap>100
+        - Close(0)>3

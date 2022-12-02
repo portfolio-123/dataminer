@@ -1,0 +1,37 @@
+##############################################################
+# The RanksPeriod operation returns historical ranks from a
+# single ranking system for multiple dates between the Start
+# and End dates. The Ranking system can be specified directly
+# in the script or use existing ranking systems created using
+# the website.
+
+# This example is from a 20-year test, run quarterly, that
+# ranks all the stocks in the Dow Jones Industrials according
+# to their yield. There is an old stockpicking strategy that
+# selects the ten Dow Jones stocks with the highest yield,
+# and this script tells you what they are each quarter, along
+# with how all the other stocks in the Dow ranked.
+##############################################################
+
+Main:
+    Operation: RanksPeriod
+    On Error:  Stop
+
+Default Settings:
+    PIT Method: Prelim
+    Ranking System: 
+        Rank: Higher
+        Method: NAsNegative
+        Nodes:
+        -
+            Type: StockFormula
+            Name: Yield
+            Formula: Yield
+            Weight: 100
+            Rank: Higher
+            Scope: Universe
+    Start Date: 2000-01-01
+    End Date: 2020-01-01
+    Frequency: 13Weeks
+    Universe: DJIA
+    Include Names: true

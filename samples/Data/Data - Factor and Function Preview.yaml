@@ -1,0 +1,29 @@
+############################################################
+# The Data operation is used to download Point in Time data. 
+############################################################
+Main:
+    Operation: Data
+    On Error:  Stop # ( [Stop] | Continue )
+
+Default Settings:
+    PIT Method: Prelim # Complete | Prelim
+
+    Start Date: 2018-01-01
+    #End Date: yyyy-mm-dd # optional
+    Frequency: 1Week
+    
+    Tickers: IBM MSFT INTC
+    #P123 UIDs: 4737 5881 4773
+    #Cusips: 459200101 594918104 458140100
+    #Ciks: 0000051143 0000789019 0000050863
+
+    Formulas:
+        - PE: PEExclXorTTM
+        - Pr2Sales: Pr2SalesTTM
+        - PiotFScore
+        - "%From SMA(200)": 100*(Close(0)/SMA(200)-1)
+        - EPS Acceleration: (EPS%ChgTTM-EPS5YCGr%)/abs(EPS5YCGr%)
+        
+# Without a vendor data license, the Data Operation is limited IBM MSFT INTC and 5 years of history.
+# To enable the download of fundamental data for other tickers, you will need a FactSet or Compustat license. 
+# Contact us for more details.

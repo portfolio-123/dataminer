@@ -1,0 +1,24 @@
+Main:
+    Operation: Ranks
+    On Error:  Stop
+Default Settings:
+    PIT Method: Prelim
+    Start Date: 2020-10-01
+    End Date: 2020-12-01
+    Frequency: 4weeks
+    Include Names: false 
+    Universe:
+        Rules:
+            - mktcap < 300
+            - LoopSum("FCF(CTR,Qtr) > 0",8) = 8
+        Starting Universe: Prussell2000
+    Ranking System: "Core: Value"
+    Ranking Method: NAsNegative
+    Columns: ranks #( ranks | composite | factor )
+    Additional Data:
+        - close(0)
+        - AvgVol(20)
+        - Pr52W%Chg
+        - ROA Rank: FRank("ROA%TTM",#Industry,#desc)
+        - OpMgn Rank: FRank("OpMgn%TTM",#Industry,#desc)
+        - OpIncGrth Rank: FRank("OpIncGr%TTM",#Industry,#desc)

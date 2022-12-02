@@ -1,0 +1,28 @@
+Main:
+    Operation: RankPerformance
+    On Error:  Stop # ( [Stop] | Continue )
+    Precision: 3 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    Vendor: Factset #( [ Factset ] | Compustat )
+    PIT Method: Prelim # ( [Complete] | Prelim )
+    Type: Stock # ( [Stock] | ETF )
+    Buckets: 5 #Maximum allowed is 20
+    Start Date: yyyy-mm-dd
+    End Date: yyyy-mm-dd
+    Rebalance Frequency: 4Weeks # ( 1Day | 1Week | 2Weeks | 3Weeks | [4Weeks] | 6Weeks | 8Weeks | 13Weeks | 26Weeks | 52Weeks )
+    Ranking: see settings_ranking.yaml
+    Universe: see settings_universe.yaml
+    Benchmark: ticker
+    Slippage: 0 # ( [0] - 5 in percent )
+    Method: Long # ( [Long] | Short  )
+    Minimum Price: 1.0
+
+Iterations:
+    -
+        Name: MyName1 # Optional 
+        # overrides of  default settings
+        
+    -
+        Name: MyName2 # Optional 
+        # overrides of  default settings

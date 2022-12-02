@@ -1,0 +1,58 @@
+###########################################################################################################################
+# This is an example of creating a ranking system within a DataMiner script by specifying the Nodes explicitly using 
+# user friendly syntax. Users familiar with the website will recognize the parameters and valid values.
+# The structure is straightforward. There are 0 or more composite levels at the root. The sum of the weights at each level 
+# must add up to 100.
+# In this example, there is a Value composite containing 2 value factors and a growth composite containing 1 factor.
+###########################################################################################################################
+
+
+Main:
+    Operation: Ranks
+    On Error:  Stop
+
+Default Settings:
+    Start Date: 2020-01-01
+    End Date: 2020-03-05
+    Frequency: 4Weeks
+    Universe: DJIA
+
+    Columns: factor #( [ranks] | composite | factor )
+    Ranking Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+    Ranking System:
+        Rank: Higher # ( [Higher] | Lower | Summation )
+        Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+        Nodes:
+        -
+            Type: Composite
+            Name: Value Composite
+            Weight: 70 # ( [0] - 100 where 0 indicates equal weight)
+            Rank: Higher # ( [Higher] | Lower | Summation )
+            Nodes:
+            -
+                Type: StockFormula
+                Name: EarnYield
+                Weight: 50  # ( [0] - 100 where 0 indicates equal weight)
+                Rank: Higher # ( [Higher] | Lower | Boolean )
+                Formula: EarnYield
+                Scope: Universe # ( [Universe] | Industry | Sector )
+            -
+                Type: StockFormula
+                Name: Pr2SalesTTMvsInd
+                Weight: 50
+                Rank: Lower
+                Formula: Pr2SalesTTM
+                Scope: Industry
+        -
+            Type: Composite
+            Name: Growth Composite
+            Weight: 30
+            Rank: Higher
+            Nodes:
+            -
+                Type: StockFormula
+                Name: EarnYield
+                Weight: 100
+                Rank: Higher
+                Formula: SalesGr%TTM
+                Scope: Industry

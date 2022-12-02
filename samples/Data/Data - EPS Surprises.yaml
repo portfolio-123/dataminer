@@ -1,0 +1,29 @@
+############################################################
+# The Data operation is used to download Point in Time data. 
+############################################################
+Main:
+    Operation: Data
+    On Error:  Stop # ( [Stop] | Continue )
+
+Default Settings:
+    PIT Method: Prelim # Complete | Prelim
+
+    Start Date: 2017-01-01
+    #End Date: yyyy-mm-dd # optional
+    Frequency: 13Weeks
+    
+    Tickers: IBM MSFT INTC
+    #P123 UIDs: 4737 5881 4773
+    #Cusips: 459200101 594918104 458140100
+    #Ciks: 0000051143 0000789019 0000050863
+
+    Formulas:
+        - HistQ1EPSActual
+        - HistQ2EPSEst
+        - Surprise%Q1
+        # The next line shows how much the stock moved relative to its sector in the 7 bars after the announcement. 
+        - Move7DaysAfter: Eval(BarsSince(LatestNewsDate)<7,NA,100*(Close(BarsSince(LatestNewsDate)-6)/Close(BarsSince(LatestNewsDate)+1)-Close(BarsSince(LatestNewsDate)-6,#Sector)/Close(BarsSince(LatestNewsDate)+1,#Sector)))
+            
+# Without a vendor data license, the Data Operation is limited IBM MSFT INTC and 5 years of history.
+# To enable the download of fundamental data for other tickers, you will need a FactSet or Compustat license. 
+# Contact us for more details.

@@ -1,0 +1,30 @@
+##############################################################
+# The RanksPeriod operation returns historical ranks from a
+# single ranking system for multiple dates between the Start
+# and End dates. The Ranking system can be specified directly
+# in the script or use existing ranking systems created using
+# the website.
+
+# This example creates a universe containing the Prussell1000
+# stocks which are in the FOODDRINKSVCE SubIndustry and have
+# a market cap > $500 million. It then ranks the stocks in that
+# universe using the "Core: Momentum" ranking system. The ranks
+# are returned for each 4 week period in 2019.
+##############################################################
+
+Main:
+    Operation: RanksPeriod
+    On Error:  Stop
+
+Default Settings:
+    PIT Method: Prelim
+    Ranking System: "Core: Momentum"
+    Start Date: 2019-01-01
+    End Date: 2020-01-01
+    Frequency: 4Weeks
+    Universe:
+        Rules:
+            - mktcap > 500
+            - SubIndustry = FOODDRINKSVCE
+        Starting Universe: Prussell1000
+    Include Names: true

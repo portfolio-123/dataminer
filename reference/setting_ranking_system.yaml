@@ -1,0 +1,27 @@
+# Ranking definition
+# 
+# There are three ways to specify the Ranking.
+
+# 1) Using an existing ranking ranking system.
+# Can be one of our pre-defined systems or yours.
+# By name or by it's unique id.
+Ranking System: 'Core: Value'  # use quotes if name has ':'
+# or
+Ranking System: 354590
+
+
+# 2) By specifying the Nodes in the xml format used on our website.
+Ranking System:
+    Nodes: in xml format
+    Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+
+# 3) By specifying the Nodes explicitly using user friendly syntax
+Ranking System:
+    Rank: Higher # ( [Higher] | Lower | Summation )
+    Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+    Nodes: see setting_ranking_nodes.yaml
+    
+# NOTES 
+# For (2) & (3) a ranking system called APIRankingSystem will be created.
+# This ranking system will be reused by the API and will always contain the
+# version specified by the last iteration of the API operation.

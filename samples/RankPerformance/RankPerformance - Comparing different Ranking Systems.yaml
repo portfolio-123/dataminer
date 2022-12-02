@@ -1,0 +1,37 @@
+########################################################################################
+# This operation runs multiple bucket performance tests of multi-factor ranking
+# systems. You can use an existing ranking system that we offer or a ranking system 
+# that you have created on the website. It is also possible to define the ranking
+# system within the DataMiner script. Other settings include the number of buckets,
+# the rebalance period, and the starting universe. The DataMiner output includes
+# many more statistics than what the website offers. To collect these stats, DataMiner
+# runs a screen backtest for each bucket.
+
+# Below is a sample script and output from a 10-year test of two ranking systems we 
+# offer, "Core: Growth" and "Core: Value". It divides the universe (stocks on the Nasdaq
+# exchange) into five buckets based on the stocks rank and compares the returns for
+# the stocks in those buckets to the returns of the universe and the benchmark. 
+# The Iterations section determines which ranking systems are tested. The 'Name' is
+# free form text you use to describe details of that iteration which will be used
+# as a heading in the output. The 'Ranking' is the name of the ranking system being tested.
+########################################################################################
+
+Main:
+    Operation: RankPerformance
+    On Error:  Stop
+Default Settings:
+    PIT Method: Prelim
+    Buckets: 5
+    Start Date: 2010-01-01
+    End Date: 2020-01-01
+    Rebalance Frequency: 4Weeks
+    Universe: NASDAQ Exchange
+    Benchmark: VTI
+    Minimum Price: 3.0
+Iterations:
+    -  
+        Name: Core Growth; 2010-2020
+        Ranking: "Core: Growth"        
+    -
+        Name: Core Value; 2010-2020
+        Ranking: "Core: Value"

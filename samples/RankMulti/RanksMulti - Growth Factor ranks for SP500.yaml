@@ -1,0 +1,55 @@
+###############################################################
+# This operation allows you to download current or historical
+# ranks for multiple ranking systems for a single date. The
+# Ranking system can be specified directly in the script or you
+# can use existing ranking systems. It is like using a screen
+# with an unlimited number of "Rating" commands
+
+# The RanksMulti operation can also return ranks for ranking systems
+# that are defined in the script. This example returns the ranks
+# for 5 growth metrics.
+###############################################################
+
+Main:
+    Operation: RanksMulti
+    On Error:  Stop
+
+Default Settings:
+    PIT Method: Prelim
+    As of Date: 2020-12-01
+    Universe: SP500
+
+Iterations:
+    -   Name: EPSExclXorGr%TTM
+        Ranking System:
+            Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+            Nodes:
+            -   Type: StockFormula
+                Rank: Higher # ( [Higher] | Lower | Boolean )
+                Formula: EPSExclXorGr%TTM
+                Scope: Universe # ( [Universe] | Industry | Sector )
+
+    -   Name: SalesGr%TTM
+        Ranking System:
+            Nodes:
+            -   Type: StockFormula
+                Formula: SalesGr%TTM
+                Scope: Industry
+
+    -   Name: OpIncGr%TTM
+        Ranking System:
+            Nodes:
+            -   Type: StockFormula
+                Formula: OpIncGr%TTM
+
+    -   Name: OperCashFlGr%TTM
+        Ranking System:
+            Nodes:
+            -   Type: StockFormula
+                Formula: OperCashFlGr%TTM
+
+    -   Name: FCFGr%TTM
+        Ranking System:
+            Nodes:
+            -   Type: StockFormula
+                Formula: FCFGr%TTM

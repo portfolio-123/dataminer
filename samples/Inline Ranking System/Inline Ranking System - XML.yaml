@@ -1,0 +1,38 @@
+###########################################################################################################################
+# This is an example of creating a ranking system by specifying the Nodes in the xml format used on the website.
+# You can edit the XML directly or copy it from the website. To copy it from the website, go to the Research section and open 
+# an existing ranking system or create a new one. Click on Text Editor. Copy the XML and paste it into your DataMiner script.
+# You will also need to paste 12 empty spaces before each line of XML because indents are important in DataMiner scripts.
+###########################################################################################################################
+
+Main:
+    Operation: Ranks
+    On Error:  Stop
+
+Default Settings:
+    Start Date: 2020-01-01
+    End Date: 2020-03-05
+    Frequency: 4Weeks
+    Universe: DJIA
+    Columns: factor #( [ranks] | composite | factor )
+    Ranking Method: NAsNegative #( [NAsNegative] | NAsNeutral )
+    Ranking System:
+        Nodes: #xml format copied from the text editor on the Ranking System, Factors page of the web site.
+            <RankingSystem RankType="Higher">
+                <Composite Name="Value" Weight="70%" RankType="Higher">
+                    <StockFormula Weight="50%" RankType="Lower" Name="Price to Sales vs Ind" Description="" Scope="Industry">
+                        <Formula>Pr2SalesTTM</Formula>
+                    </StockFormula>
+                    <StockFactor Weight="50%" RankType="Higher" Scope="Universe">
+                        <Factor>EarnYield</Factor>
+                    </StockFactor>
+                </Composite>
+                <Composite Name="Growth" Weight="30%" RankType="Higher">
+                    <StockFactor Weight="75%" RankType="Higher" Scope="Universe">
+                        <Factor>SalesGr%TTM</Factor>
+                    </StockFactor>
+                    <StockFormula Weight="25%" RankType="Higher" Name="Sales Acceleration - recent" Description="" Scope="Universe">
+                        <Formula>(SalesGr%PYQ- SalesGr%TTM)/abs( SalesGr%TTM)</Formula>
+                    </StockFormula>
+                </Composite>
+            </RankingSystem>

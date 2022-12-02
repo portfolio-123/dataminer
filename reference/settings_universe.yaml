@@ -1,0 +1,41 @@
+# Universe definition
+#
+Universe: P123 Universe name or symbol
+--or--
+Universe: My universe name
+--or--
+Universe:
+    Rules:
+        - rule1
+        - rule2
+    Starting Universe: SP1500
+    
+# P123 Universes
+Symbol			Name
+ALLFUND			All Fundamentals - USA
+ALLSTOCKS		All Stocks - USA
+DJIA			Dow Jones Industrial Average
+SP1500			iShares S&P1500 CompositeCap (IVV+IJH+IJR)
+SP500			iShares S&P500 LargeCap (IVV)
+NOOTC			No OTC Exchange
+Prussell1000	Prussell 1000
+Prussell2000	Prussell 2000
+Prussell3000	Prussell 3000
+$ADR			American Depositary Receipt
+SP400			iShares S&P400 MidCap (IJH)
+SP600			iShares S&P600 SmallCap (IJR)
+MasterLP		Master Limited Partnership
+NASDAQ100		Nasdaq 100
+NASD			NASDAQ Exchange
+NYSE			NY Stock Exchange
+NYSEMKT			NYSE MKT (AMEX)
+OTC				Over The Counter
+LargeCap		Portfolio123 Large Cap
+MicroCap		Portfolio123 Micro Cap
+MidCap			Portfolio123 Mid Cap
+SmallCap		Portfolio123 Small Cap
+ALLFUNDCAD		All Fundamentals - CANADA
+CanadaTrust		CanadaTrust
+SPTSX			S&P/TSX Composite Index
+TSX				Toronto Stock Exchange
+TSXV			TSX Venture Exchange

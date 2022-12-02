@@ -1,0 +1,79 @@
+#################################################################
+# A rolling screen backtest means that the screen backtest is first
+# run on the first Saturday after the Start Date and the stocks are
+# held for the number of days specified as the Holding Period. Then
+# the screen backtest is run again using a start date that is either
+# 1 week or 4 weeks in the future as specified by the Frequency. This
+# continues until tests have been run for the entire period between
+# the specified Start Date and End Date.
+#
+# This example looks at two value factors and, using quick rank and 
+# the FRank function, tests the top 12 stocks, the top 21, the top 
+# 25%, and the top 40% for a 367-day holding period over a 15 year 
+# period.
+#################################################################
+
+Main:
+    Operation: RollingScreen
+    On Error: Stop
+
+Default Settings:
+    Type: Stock
+    Method: Long
+    Max Num Holdings: 0
+    Benchmark: SPY
+    PIT Method: Complete
+
+    Universe:
+        Rules:
+            - mktcap > 50
+            - avgdailytot(10) > 250000
+        Starting Universe: All Fundamentals - USA
+
+    Trans Price: Open
+    Start Date: 2005-04-03
+    End Date: 2020-04-03
+    Frequency: 4Weeks
+    Holding Period: 367
+
+Iterations:
+    -
+        Name: CF12/EV top 12
+        Ranking:
+            Formula: (CurFYEPSMean*SharesFDA + DepAmortA)/EV
+            Lower is Better: false
+        Max Num Holdings: 12
+    -
+        Name: CF12/EV top 21
+        Ranking:
+            Formula: (CurFYEPSMean*SharesFDA + DepAmortA)/EV
+            Lower is Better: false
+        Max Num Holdings: 21
+    -
+        Name: CF12/EV top 25%
+        Rules:
+            - FRank("(CurFYEPSMean*SharesFDA + DepAmortA)/EV",#all,#desc) > 75
+    -
+        Name: CF12/EV top 40%
+        Rules:
+            - FRank("(CurFYEPSMean*SharesFDA + DepAmortA)/EV",#all,#desc) > 60
+    -
+        Name: EBITDA/EV TTM top 12
+        Ranking:
+            Formula: OpIncBDeprTTM/EV
+            Lower is Better: false
+        Max Num Holdings: 12
+    -
+        Name: EBITDA/EV TTM top 21
+        Ranking:
+            Formula: OpIncBDeprTTM/EV
+            Lower is Better: false
+        Max Num Holdings: 21
+    -
+        Name: EBITDA/EV TTM top 25%
+        Rules:
+            - FRank("OpIncBDeprTTM/EV",#all,#desc) > 75
+    -
+        Name: EBITDA/EV TTM top 40%
+        Rules:
+            - FRank("OpIncBDeprTTM/EV",#all,#desc) > 60

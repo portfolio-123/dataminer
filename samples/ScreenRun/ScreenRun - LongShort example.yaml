@@ -1,0 +1,43 @@
+####################################################################################
+# Screens allow you to filter a universe of stocks or ETFs based on the
+# rules you provide. The ScreenRun operation in DataMiner has all the same
+# capabilities as the screener on the website including the option
+# of incorporating a ranking system into the screen and running screens
+# that are either long, long/short or hedged.
+#
+# This example is a long/short screen which:
+#  - Creates a universe consisting of reasonable liquid non-ADR Technology stocks. 
+#  - Ranks the stocks in this universe based on the Core: Momentum ranking system.
+#  - Pick 5 'Long' stocks which are the highest ranked stocks that are also in
+#    the top 50% of Tech stocks based on Price to Sales ascending (ie cheap stocks).
+#  - Pick 5 'Short' stocks which are the lowest ranked stocks that are also in the
+#    lowest 50% of Tech stocks based on Price to Sales ascending (ie expensive stocks).
+####################################################################################
+
+Main:
+    Operation: ScreenRun
+    On Error:  Stop
+    Precision: 2
+
+Default Settings:
+    Vendor: Factset
+    PIT Method: Prelim
+    Type: Stock
+    As of Date: 2021-01-09
+    End Date: 2021-01-09
+    Ranking: "Core: Momentum"
+    Max Num Holdings: 5
+    Benchmark: XLK #Tech
+    Universe:
+        Rules:
+            - Sector = TECH
+            - AvgDailyTot(30) > 1000000
+            - "!Universe($ADR)"  #No ADRs
+        Starting Universe: ALLFUND
+    Method: LongShort
+    Rules: #Common rules 
+        - Pr52W%Chg != NA  #Has a year of price history
+    Long Rules:
+        - FRank("Pr2SalesTTM",#Industry,#Asc) > 50
+    Short Rules:
+        - FRank("Pr2SalesTTM",#Industry,#Asc) < 50

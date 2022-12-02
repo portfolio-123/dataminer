@@ -1,0 +1,62 @@
+#################################################################
+# A rolling screen backtest means that the screen backtest is first
+# run on the first Saturday after the Start Date and the stocks are
+# held for the number of days specified as the Holding Period. Then
+# the screen backtest is run again using a start date that is either
+# 1 week or 4 weeks in the future as specified by the Frequency. This
+# continues until tests have been run for the entire period between
+# the specified Start Date and End Date.
+#
+# This example creates a custom universe and runs rolling screen
+# backtests for several ranking systems and alters the number of 
+# stocks held.
+#################################################################
+
+Main:
+    Operation: RollingScreen
+    On Error: Stop
+
+Default Settings:
+    Type: Stock
+    Method: Long
+    Benchmark: SPY
+
+    Universe:
+        Starting Universe: All Fundamentals - USA
+        Rules:
+            - mktcap > 5000
+            - avgdailytot(10) > 250000
+    Start Date: 2015-04-03
+    End Date: 2019-04-03
+    Frequency: 4Weeks
+    Holding Period: 365
+
+Iterations:
+    -
+        # Using quick rank
+        Name: PT revision top 20
+        Ranking:
+            Formula: PriceTargetMean/PriceTarget4WkAgo
+            Lower is Better: false
+        Max Num Holdings: 10
+    -
+        # Using P123 pre-dedined ranking systems
+        Name: Core Combination top 20
+        Max Num Holdings: 20
+        Ranking: "Core Combination"
+    -
+        Name: Core Growth top 20
+        Max Num Holdings: 20
+        Ranking: "Core: Growth"
+    -
+        Name: Core Momentum top 10
+        Max Num Holdings: 10
+        Ranking: "Core: Momentum"
+    -
+        Name: Core Momentum top 20
+        Max Num Holdings: 20
+        Ranking: "Core: Momentum"
+    -
+        Name: Core Sentiment top 20
+        Max Num Holdings: 20
+        Ranking: "Core: Sentiment"

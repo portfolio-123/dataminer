@@ -1,0 +1,44 @@
+Main:
+    Operation: ScreenBacktest
+    On Error:  Stop # ( [Stop] | Continue )
+    Precision: 3 # ( [ 2 ] | 3 | 4 )
+
+Default Settings:
+    Vendor: Factset #( [ Factset ] | Compustat )
+    PIT Method: Prelim # ( [Complete] | Prelim )
+    Type: Stock # ( [Stock] | ETF )
+    Start Date: yyyy-mm-dd
+    End Date: yyyy-mm-dd
+    Rank Tolerance: 0
+    Carry Cost: 0
+    Rebalance Frequency: 1Week # ( 1Week | 2Weeks | 3Weeks | [4Weeks] | 6Weeks | 8Weeks | 13Weeks | 26Weeks | 52Weeks )
+    Risk Stats Period: monthly # ( [monthly] | weekly | daily )
+    Ranking: see settings_ranking.yaml
+    Universe: see settings_universe.yaml
+    Max Num Holdings: 0 # ( [0] or the max number of stocks to hold )
+    Benchmark: ticker
+    Trans Price: Close # ( [Open] | Close | AvgHiLow )
+    Max Pos Pct: 0 # ( [0] - 100. Use 0 for no maximum )
+    Slippage: 0 # ( [0] - 5 in percent )
+    Method: Long # ( [Long] | Short | LongShort | Hedge )
+    Screen: 12345 # id of saved screen
+    
+    # Screening rules 
+    Rules:
+        - MktCap > 1000 # screening rule example
+        - # other screening rules
+    # only for Method LongShort
+    Long Rules:
+        - MktCap>100
+        - Close(0)>3
+    Short Rules:
+        - MktCap>100
+        - Close(0)>3
+    # only for Method Hedge
+    Hedge Rules:
+        - MktCap>100
+        - Close(0)>3
+    
+    # Long Short weights only required for Methods LongShort or Hedge
+    Long Weight: float # 0-[100]
+    Short Weight: float # 0-[100]

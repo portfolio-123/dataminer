@@ -1,0 +1,24 @@
+##############################################################
+# The RanksPeriod operation returns historical ranks from a
+# single ranking system for multiple dates between the Start
+# and End dates. The Ranking system can be specified directly
+# in the script or use existing ranking systems created using
+# the website.
+
+# This example returns the ranks from the "Core: Value" ranking
+# system for the SP500 stocks for each quarter of 2019.
+##############################################################
+
+Main:
+    Operation: RanksPeriod
+    On Error:  Stop # ( [Stop] | Continue )
+
+Default Settings:
+    PIT Method: Prelim # ( [Complete] | Prelim )
+
+    Ranking System: "Core: Value"
+    Start Date: 2019-01-01
+    End Date: 2020-01-01
+    Frequency: 13Weeks
+    Universe: SP500
+    Include Names: false # ( true | [false] )
