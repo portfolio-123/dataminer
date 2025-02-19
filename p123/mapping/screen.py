@@ -75,8 +75,7 @@ SCREEN_RUN = {
     'As of Date': {
         'field': 'asOfDt',
         'isValid': validation.date,
-        'transform': transform.date,
-        'required': True
+        'transform': transform.date
     },
     'End Date': {
         'field': 'endDt',

@@ -63,6 +63,10 @@ def ranking_system(ranking):
     elif not misc.is_dict(ranking):
         return False
 
+    return ranking_system_dict(ranking)
+
+
+def ranking_system_dict(ranking):
     nodes = ranking.get('Nodes')
     if nodes is None:
         return '"Nodes" property required'
@@ -92,9 +96,10 @@ def ranking_system(ranking):
 
 
 def screen_ranking(ranking):
-    ret = ranking_system(ranking)
-    if (misc.is_bool(ret) and ret) or not misc.is_dict(ranking):
-        return ret
+    if misc.is_str(ranking) or misc.is_int(ranking):
+        return True
+    elif not misc.is_dict(ranking):
+        return False
 
     has_formula = 'Formula' in ranking
     has_nodes = 'Nodes' in ranking
@@ -103,20 +108,23 @@ def screen_ranking(ranking):
     if has_formula and has_nodes:
         return '"Formula" and "Nodes" properties cannot be mixed'
 
-    formula = ranking.get('Formula')
-    if not misc.is_number(formula) and (not misc.is_str(formula) or not formula):
-        return '"Formula" property is invalid'
+    if has_formula:
+        formula = ranking.get('Formula')
+        if not misc.is_number(formula) and (not misc.is_str(formula) or not formula):
+            return '"Formula" property is invalid'
 
-    for key, value in ranking.items():
-        if key == 'Formula':
-            pass
-        elif key == 'Lower is Better':
-            if not misc.is_bool(value):
-                return '"Lower is Better" property is invalid'
-        else:
-            return f'Unexpected "{key}" property'
+        for key, value in ranking.items():
+            if key == 'Formula':
+                pass
+            elif key == 'Lower is Better':
+                if not misc.is_bool(value):
+                    return '"Lower is Better" property is invalid'
+            else:
+                return f'Unexpected "{key}" property'
 
-    return True
+        return True
+    else:
+        return ranking_system_dict(ranking)
 
 
 def screen_ranking_node_error(breadcrumbs, node_idx=None, node_type=None, error=None):
@@ -152,7 +160,7 @@ def screen_ranking_nodes(nodes: list, breadcrumbs='Nodes'):
             if key == 'Type':
                 pass
             elif key == 'Weight':
-                if not misc.is_number(value) or value < 0 or value > 100:
+                if not misc.is_number(value) or value < 0:
                     return screen_ranking_node_error(breadcrumbs, idx, node_type, error='"Weight" property is invalid')
                 weight = value
             elif key == 'Rank':
@@ -221,8 +229,6 @@ def screen_ranking_nodes(nodes: list, breadcrumbs='Nodes'):
             ret = screen_ranking_nodes(false_nodes, f'{breadcrumbs} > {node_type} ({idx + 1}) False')
             if not misc.is_bool(ret) or not ret:
                 return ret
-    if total_weight and total_weight != 100:
-        return screen_ranking_node_error(breadcrumbs, error='Node weights do not add up to 100')
     return True
 
 
