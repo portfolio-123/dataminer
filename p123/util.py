@@ -81,19 +81,24 @@ def process_screen_rolling_backtest_result(json: dict, start_dt, end_dt, precisi
     length = len(json["rows"])
     data = [start_dt, end_dt, length]
     data.extend(val for val in json["average"][4:8])
-    data.append(min(float(item[8]) for item in json["rows"]))
-    data.append(max(float(item[9]) for item in json["rows"]))
+    min_pct_no_slip_idx = json["columns"].index("Min % no slip")
+    max_pct_no_slip_idx = json["columns"].index("Max % no slip")
+    data.append(min(float(item[min_pct_no_slip_idx]) for item in json["rows"]))
+    data.append(max(float(item[max_pct_no_slip_idx]) for item in json["rows"]))
     data.append(json["average"][10])
+    ret_pct_idx = json["columns"].index("Ret%")
     data.append(
         round(
-            statistics.fmean(float(item[5]) for item in json["rows"][0:13]), precision
+            statistics.fmean(float(item[ret_pct_idx]) for item in json["rows"][0:13]),
+            precision,
         )
         if length >= 13
         else None
     )
     data.append(
         round(
-            statistics.fmean(float(item[5]) for item in json["rows"][0:65]), precision
+            statistics.fmean(float(item[ret_pct_idx]) for item in json["rows"][0:65]),
+            precision,
         )
         if length >= 65
         else None
@@ -102,7 +107,20 @@ def process_screen_rolling_backtest_result(json: dict, start_dt, end_dt, precisi
         round(
             (
                 statistics.geometric_mean(
-                    float(item[5]) / 100 + 1 for item in json["rows"]
+                    float(item[ret_pct_idx]) / 100 + 1 for item in json["rows"]
+                )
+                - 1
+            )
+            * 100,
+            precision,
+        )
+    )
+    bench_pct_idx = json["columns"].index("Bench%")
+    data.append(
+        round(
+            (
+                statistics.geometric_mean(
+                    float(item[bench_pct_idx]) / 100 + 1 for item in json["rows"]
                 )
                 - 1
             )
@@ -114,19 +132,7 @@ def process_screen_rolling_backtest_result(json: dict, start_dt, end_dt, precisi
         round(
             (
                 statistics.geometric_mean(
-                    float(item[6]) / 100 + 1 for item in json["rows"]
-                )
-                - 1
-            )
-            * 100,
-            precision,
-        )
-    )
-    data.append(
-        round(
-            (
-                statistics.geometric_mean(
-                    float(item[5]) / 100 + 1 for item in json["rows"][0:13]
+                    float(item[ret_pct_idx]) / 100 + 1 for item in json["rows"][0:13]
                 )
                 - 1
             )
@@ -140,7 +146,7 @@ def process_screen_rolling_backtest_result(json: dict, start_dt, end_dt, precisi
         round(
             (
                 statistics.geometric_mean(
-                    float(item[5]) / 100 + 1 for item in json["rows"][0:65]
+                    float(item[ret_pct_idx]) / 100 + 1 for item in json["rows"][0:65]
                 )
                 - 1
             )
@@ -150,9 +156,11 @@ def process_screen_rolling_backtest_result(json: dict, start_dt, end_dt, precisi
         if length >= 65
         else None
     )
+    pos_cnt_idx = json["columns"].index("#Pos")
     data.append(
         round(
-            statistics.fmean(float(item[4]) for item in json["rows"][0:65]), precision
+            statistics.fmean(float(item[pos_cnt_idx]) for item in json["rows"][0:65]),
+            precision,
         )
         if length >= 65
         else None
